@@ -27,7 +27,7 @@ Ce document décrit la procédure de déploiement d’une application Laravel 10
 ### 3.1 Cloner le projet
 ```bash
 cd /var/www
-git clone https://github.com/votre-repo/intia-assurance.git
+git clone https://github.com/pakito312/intia.git
 cd intia-assurance
 ```
 
@@ -63,7 +63,57 @@ DB_PASSWORD=mot_de_passe_secure
 ```env
 APP_URL=https://intia.mondomaine.com
 ```
+### 4.3.1 Utilisation en local
 
+Si vous voulez exécuter l’application en local (développement), voici quelques options rapides et variables d’exemple à ajuster dans .env :
+
+- Variables d’environnement recommandées pour le local :
+```env
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://127.0.0.1:8000
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=intia_local
+DB_USERNAME=root
+DB_PASSWORD=        # laisser vide si XAMPP/MAMP par défaut
+```
+
+- Avec PHP built-in server (rapide) :
+```bash
+composer install
+npm install
+npm run dev         # ou npm run watch pour Vite en dev
+php artisan migrate --seed
+php artisan serve --host=127.0.0.1 --port=8000
+```
+
+- Avec XAMPP (Windows) / MAMP (macOS) :
+    - Copier le projet dans le dossier web (ex. C:/xampp/htdocs/intia-assurance).
+    - Mettre APP_URL=http://localhost/intia-assurance si vous servez via Apache.
+    - Vérifier que MySQL (MariaDB) est démarré dans XAMPP/MAMP.
+    - Lancer composer/npm puis migrations comme ci‑dessus.
+
+- Avec Laravel Valet (macOS/Linux) :
+```bash
+valet park        # dans le dossier parent
+cd intia-assurance
+composer install
+npm install
+npm run dev
+php artisan migrate --seed
+# acces via http://intia-assurance.test (ou nom choisi)
+```
+
+- Permissions locales : sur Linux/macOS assurer storage et bootstrap/cache inscriptibles :
+```bash
+sudo chown -R $USER:www-data storage bootstrap/cache
+chmod -R 775 storage bootstrap/cache
+```
+
+Conseil : utiliser npm run dev pour le développement (hot reload) et npm run build pour préparer une version de production.
 ### 4.4 Générer la clé d’application
 ```bash
 php artisan key:generate
@@ -78,7 +128,7 @@ CREATE DATABASE intia_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 ### 5.2 Exécuter les migrations
 ```bash
-php artisan migrate --force
+php artisan migrate:fresh --seed
 ```
 
 ### 5.3 (Optionnel) Importer les données initiales
@@ -165,6 +215,11 @@ Ajouter une route de santé :
 ```php
 Route::get('/health-check', fn() => ['status' => 'ok']);
 ```
+### 11.1 Accès au Monitoring
+
+- URL d’accès (local uniquement) :
+  - PHP built-in : http://127.0.0.1:8000/telescope
+
 
 Surveiller via :
 - UptimeRobot / BetterUptime
