@@ -220,7 +220,13 @@ Route::get('/health-check', fn() => ['status' => 'ok']);
 - URL d’accès (local uniquement) :
   - PHP built-in : http://127.0.0.1:8000/telescope
 
+## 12. Test
+Il faut se connecter en utilisant les identifiant email/password suivant
 
+    - admin1@intial.local/Intial@123
+    - admin2@intial.local/Intial@123
+
+    
 Surveiller via :
 - UptimeRobot / BetterUptime
 - Logs Apache et Laravel
